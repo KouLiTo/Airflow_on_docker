@@ -1,0 +1,28 @@
+- run:
+    python --version
+        - if 3.10.7, we need only 3.10
+
+- identify a right airflow version, for example 2.7.2 (see documentation: https://airflow.apache.org/docs/apache-airflow/stable/start.html)
+
+- run (for Windows 10):
+    SET CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-2.7.2/constraints-3.10.txt"
+        it will set the env variable
+
+- run (for Windows 10):
+    pip install "apache-airflow==2.7.2" --constraint "%CONSTRAINT_URL%"
+
+- run:
+    airflow standalone
+
+CONSIDER ABOVE INSTRUCTIONS AS A GOOD BACKGROUND KNOWLEDGE
+
+Here you will see that it is not easy to start airflow on Windows, so I will use a docker image
+    - if you do not ha docker, install it, check it version with "docker-compose --version"
+    - folders are already created in the project (mkdir airflow_docker - create a folder, cd airflow_docker - enter it)
+    - download the official docker image for airflow with curl "https://airflow.apache.org/docs/apache-airflow/2.7.2/docker-compose.yaml" -o "docker-compose.yaml"
+    - move requirements.txt to the docker folder and run "docker build . --tag extending_airflow:latest"
+    - open docker compose and make this change "image: ${AIRFLOW_IMAGE_NAME:-extending_airflow:latest}" on the image line
+    - for information: we need three folders (mkdir dags, logs, plugins)
+    - build images of dependencies with "docker compose up airflow-init"
+    - build airflow container with "docker compose up"
+    - open localhost and give your credentials, see docker-compose.yaml
